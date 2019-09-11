@@ -20,6 +20,10 @@
   background-color: #ddd;
 }
 
+.brand-logo,img{
+  max-width:100%!important;
+}
+
 .materialize-textarea{
   color: black;
   padding: .1rem 0 .7rem 0!important;

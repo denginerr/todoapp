@@ -4,9 +4,14 @@ import SortableItem from './SortableItem';
 import { connect } from "react-redux";
 import arrayMove from 'array-move';
 
-const Container = ({state, todo, onSortEnd, addCategory, toggleFilter}) => (
+const Container = ({ state, todo, onSortEnd, addCategory, toggleStatus, toggleFilter}) => (
     <div className="container">
         <ul id="dropdown1" className="dropdown-content">
+            {state.echo.map((value, index) => (
+                <li key={`filt${index}`} className={value.show ? "teal lighten-2" : "white"}
+                    onClick={() => toggleStatus(index)}>
+                    <span className={value.show ? "white-text" : "teal-text"}>{value.title}</span></li>
+            ))}
             {state.todo.map((value, index) => (
                 <li key={`filt${index}`} className={value.show ? "teal lighten-2" : "white"}
                 onClick={() => toggleFilter(index)}>
@@ -25,7 +30,7 @@ const Container = ({state, todo, onSortEnd, addCategory, toggleFilter}) => (
         </nav>
         <SortableContainer onSortEnd={(collection) => onSortEnd(arrayMove(state.todo, collection.oldIndex, collection.newIndex))} useDragHandle axis="xy">
             {todo.map((value, index) => (
-                <SortableItem key={`item${index}`} id={index} index={index} value={value} />
+                <SortableItem key={`item${index}`} id={index} index={index} value={value} done={state.echo[0].show ? true : ""} yet={state.echo[1].show ? false : ""} />
             ))}
         </SortableContainer>
         {todo.length === 0 ? (
@@ -38,13 +43,14 @@ const Container = ({state, todo, onSortEnd, addCategory, toggleFilter}) => (
 
 const mapStateToProps = state => ({
     state,
-    todo: state.todo.filter(e => e.show)
+    todo: state.todo.filter(e => e.show),
 })
 
 const map = dispatch => ({
     addCategory: () => dispatch({ type: "ADD_CATEGORY_ASYNC", value: false }),
     onSortEnd: (index) => dispatch({ type: "ON_SORT_END_ASYNC", value: index }),
     toggleFilter: (index) => dispatch({ type: "TOGGLE_FILTER_ASYNC", id: index }),
+    toggleStatus: (index) => dispatch({ type: "TOGGLE_STATUS_ASYNC", id: index }),
 })
 
 export default connect(

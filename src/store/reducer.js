@@ -1,10 +1,25 @@
 const initialState = {
   todo: [{
       title: "Welcome to Dendy App",
-      lists: [],
+      lists: [
+        {
+          list: "List Pertama",
+          status: false,
+        }, {
+          list: "List Kedua",
+          status: true,
+        }
+      ],
       show: true,
     }],
-  loading: false
+  loading: false,
+  echo: [{
+    title: "Selesai",
+    show: false,
+  }, {
+    title: "Belum Selesai",
+    show: true,
+  }]
 }
 
 const reducer = (state=initialState, action) => {
@@ -42,7 +57,6 @@ const reducer = (state=initialState, action) => {
         newState.todo[i].lists = [
           {
             list: promptList,
-            show: true,
             status: false,
           },
           ...newState.todo[i].lists
@@ -59,10 +73,13 @@ const reducer = (state=initialState, action) => {
       newState.todo[i[0]].lists.splice(i[1], 1);
       break;
     case "TOGGLE_LIST":
-      newState.todo[i[1]].lists[i[1]].status = !newState.todo[i[1]].lists[i[1]].status
+      newState.todo[i[0]].lists[i[1]].status = !newState.todo[i[0]].lists[i[1]].status
       break;
     case "TOGGLE_FILTER_CATEGORY":
-        newState.todo[i].show = !newState.todo[i].show
+      newState.todo[i].show = !newState.todo[i].show
+      break;
+    case "TOGGLE_STATUS":
+      newState.echo[i].show = !newState.echo[i].show
       break;
     case "LOADING_PROGRESS":
       newState.loading = i
